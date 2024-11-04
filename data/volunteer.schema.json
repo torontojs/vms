@@ -1,0 +1,112 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "https://vms.torontojs.com/volunteer.schema.json",
+	"title": "VMS Data Schema",
+	"description": "Description for data and fields saved by the VMS.",
+	"definitions": {
+		"agreement": {
+			"type": "object",
+			"description": "An agreement signed by the volunteer, if contains information about the date it was signed, as well as the document template version.",
+			"required": ["signedAt", "document", "version"],
+			"properties": {
+				"signedAt": {
+					"type": "string",
+					"format": "date-time",
+					"description": "A timestamp for when the agreement was signed."
+				},
+				"document": {
+					"type": "string",
+					"description": "The specific document template that the volunteer signed.",
+					"enum": ["VOLUNTEER_AGREEMENT", "IMAGE_RELEASE"]
+				},
+				"version": {
+					"type": "string",
+					"description": "The version of the document used when signing. This is used so when the documents update, we keep track of each document signed."
+				}
+			}
+		},
+		"team": {
+			"type": "object",
+			"description": "A team that the volunteer may be part of.",
+			"required": ["id", "joinedAt", "role"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"format": "uuid",
+					"description": "The id for the team the volunteer joined."
+				},
+				"joinedAt": {
+					"type": "string",
+					"format": "date-time",
+					"description": "A timestamp representing when the volunteer joined the team."
+				},
+				"leftAt": {
+					"type": "string",
+					"format": "date-time",
+					"description": "A timestamp representing when the volunteer left the team."
+				},
+				"role": {
+					"type": "string",
+					"description": "The role the volunteer have for the team in question."
+				}
+			}
+		}
+	},
+	"type": "object",
+	"required": ["id", "email", "socialMedia", "joinedAt", "agreements"],
+	"properties": {
+		"id": {
+			"type": "string",
+			"format": "uuid",
+			"description": "A UUID identifying the volunteer internally. this field is generated when the data is saved."
+		},
+		"email": {
+			"type": "string",
+			"format": "email",
+			"description": "The volunteer's email address. This is the external identifier used for adding a volunteer to the system and to check for duplicates."
+		},
+		"name": {
+			"type": "string",
+			"description": "A name the volunteers would like to be identified by."
+		},
+		"pronouns": {
+			"type": "string",
+			"description": "The volunteer preffered pronouns, if they wish to provide it."
+		},
+		"socialMedia": {
+			"type": "object",
+			"description": "A list of social media links/handles for reaching out to the volunteer.",
+			"required": ["slack"],
+			"properties": {
+				"slack": { "type": "string", "format": "uri" },
+				"github": { "type": "string", "format": "uri" },
+				"linkedin": { "type": "string", "format": "uri" },
+				"discord": { "type": "string", "format": "uri" },
+				"twitter": { "type": "string", "format": "uri" },
+				"mastodon": { "type": "string", "format": "uri" },
+				"website": { "type": "string", "format": "uri" },
+				"other": { "type": "string", "format": "uri" }
+			}
+		},
+		"birthday": {
+			"type": "string",
+			"format": "date",
+			"description": "The volunteer birthday, consisting of day and month, for celebrating \"birthdays of the month\" and other related events."
+		},
+		"joinedAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The date the volunteer has joined Toronto JS."
+		},
+		"agreements": {
+			"type": "array",
+			"description": "A list containing the agreements the volunteer signed.",
+			"items": { "$ref": "#/definitions/agreement" }
+		},
+		"teams": {
+			"type": "array",
+			 "description": "A list of the teams, including roles, that the volunteer has joined.",
+			 "items": { "$ref": "#/definitions/team" }
+		}
+	}
+}
