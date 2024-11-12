@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "https://vms.torontojs.com/schemas/role.schema.json",
+	"title": "Role Schema",
+	"description": "A role assumed by a volunteer on a team.",
+	"type": "object",
+	"required": ["id", "schemaVersion", "role", "description", "teamId", "profileId", "createdAt", "insertedAt"],
+	"properties": {
+		"id": {
+			"type": "string",
+			"format": "uuid",
+			"description": "A UUID identifying the role internally. This field is generated when the data is created."
+		},
+		"schemaVersion": {
+			"type": "integer",
+			"description": "The schema version used to save this item. In case the data is saved on an older schema version it may not be readable by the latest VMS version and will need to be converted before being used."
+		},
+		"role": {
+			"type": "string",
+			"description": "The role's human-readable name."
+		},
+		"description": {
+			"type": "string",
+			"description": "The team's description, in markdown format."
+		},
+		"teamId": {
+			"type": "string",
+			"format": "uuid",
+			"description": "The UUID for the team under witch this role is available."
+		},
+		"profileId": {
+			"type": "string",
+			"format": "uuid",
+			"description": "The UUID for the profile of the person who has this role."
+		},
+		"createdAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when the team was created."
+		},
+		"insertedAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when the team information was saved for the first time to the VMS. This field is generated when the data is created."
+		}
+	}
+}

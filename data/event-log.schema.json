@@ -1,0 +1,48 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "https://vms.torontojs.com/schemas/event-log.schema.json",
+	"title": "Event Log Schema",
+	"description": "An entry for any event happening on the VMS, it takes the format of \"(Subject) - [Verb] - {Object}\" to be read like English.",
+	"examples": [
+		"(Marco) [joined] the {VMS Team}",
+		"(Marco) [signed] the {Image Release Form}",
+		"(VMS Team) [starts] on {Toronto JS}"
+	],
+	"type": "object",
+	"required": ["id", "schemaVersion", "subject", "verb", "object", "createdAt", "insertedAt"],
+	"properties": {
+		"id": {
+			"type": "string",
+			"format": "uuid",
+			"description": "A UUID identifying the log entry internally. This field is generated when the data is created."
+		},
+		"schemaVersion": {
+			"type": "integer",
+			"description": "The schema version used to save this item. In case the data is saved on an older schema version it may not be readable by the latest VMS version and will need to be converted before being used."
+		},
+		"subject": {
+			"type": "string",
+			"format": "uuid",
+			"description": "The UUID for the subject that executes the action."
+		},
+		"verb": {
+			"type": "string",
+			"description": "The action executed."
+		},
+		"object": {
+			"type": "string",
+			"format": "uuid",
+			"description": "The UUID for the object that the action was executed upon."
+		},
+		"createdAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when event happened."
+		},
+		"insertedAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when the event was saved for the first time to the VMS. This field is generated when the data is created."
+		}
+	}
+}
