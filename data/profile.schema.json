@@ -31,7 +31,7 @@
 		"createdAt": {
 			"type": "string",
 			"format": "date-time",
-			"description": "The timestamp when the volutneer profile was created."
+			"description": "The timestamp when the volunteer profile was created."
 		},
 		"insertedAt": {
 			"type": "string",
