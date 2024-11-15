@@ -33,7 +33,7 @@
 			"format": "uuid",
 			"description": "The UUID for the profile of the person who has this role."
 		},
-		"createdAt": {
+		"happenedAt": {
 			"type": "string",
 			"format": "date-time",
 			"description": "The timestamp when the team was created."

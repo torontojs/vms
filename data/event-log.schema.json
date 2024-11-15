@@ -34,7 +34,7 @@
 			"format": "uuid",
 			"description": "The UUID for the object that the action was executed upon."
 		},
-		"createdAt": {
+		"happenedAt": {
 			"type": "string",
 			"format": "date-time",
 			"description": "The timestamp when event happened."

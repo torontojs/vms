@@ -28,7 +28,7 @@
 			"type": "string",
 			"description": "The volunteer's profile description, in markdown format."
 		},
-		"createdAt": {
+		"happenedAt": {
 			"type": "string",
 			"format": "date-time",
 			"description": "The timestamp when the volunteer profile was created."
