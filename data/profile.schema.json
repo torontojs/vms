@@ -1,0 +1,42 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema",
+	"$id": "https://vms.torontojs.com/schemas/profile.schema.json",
+	"title": "Volunteer Profile",
+	"description": "The profile of a volunteer on Toronto JS.",
+	"type": "object",
+	"required": ["id", "email", "schemaVersion", "name", "createdAt", "insertedAt"],
+	"properties": {
+		"id": {
+			"type": "string",
+			"format": "uuid",
+			"description": "A UUID identifying the volunteer profile internally. this field is generated when the data is saved."
+		},
+		"email": {
+			"type": "string",
+			"format": "email",
+			"description": "The volunteer's email address. This is the external identifier used for adding a volunteer to the system and to check for duplicates."
+		},
+		"schemaVersion": {
+			"type": "integer",
+			"description": "The schema version used to save this item. In case the data is saved on an older schema version it may not be readable by the latest VMS version and will need to be converted before being used."
+		},
+		"name": {
+			"type": "string",
+			"description": "A name the volunteers would like to be identified by."
+		},
+		"description": {
+			"type": "string",
+			"description": "The volunteer's profile description, in markdown format."
+		},
+		"happenedAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when the volunteer profile was created."
+		},
+		"insertedAt": {
+			"type": "string",
+			"format": "date-time",
+			"description": "The timestamp when the volunteer profile information was saved for the first time to the VMS. This field is generated when the data is created."
+		}
+	}
+}
