@@ -1,0 +1,11 @@
+# Top-level configuration
+name = "vms"
+main = "src/index.ts"
+compatibility_date = "2022-07-12"
+compatibility_flags = [ "nodejs_compat" ]
+
+workers_dev = true
+
+[env.dev]
+name = "vms-dev"
+

@@ -1,0 +1,16 @@
+{
+  "name": "cloudflare-hono-d1",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify --env dev",
+    "deploy:prod": "wrangler deploy --minify"
+  },
+  "dependencies": {
+    "hono": "^4.6.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241112.0",
+    "@types/node": "^22.10.1",
+    "wrangler": "^3.91.0"
+  }
+}
