@@ -29,5 +29,7 @@
 	"volta": {
 		"node": "22.12.0"
 	},
+	"overrides": {
+		"is-core-module": "npm:@nolyfill/is-core-module@^1"
 	}
 }
