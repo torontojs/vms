@@ -4,15 +4,17 @@ import profilesRoute from './routes/profiles/profiles';
 
 const app = new Hono();
 
-app.get('/', (c) => c.text('Welome to volunteer management system!'));
+app.get('/', (context) => context.text('Welome to volunteer management system!'));
 
 // CORS middleware
 app.use(
 	'/*',
 	cors({
-		origin: '*', // TODO: Allow all origins for now. Use specific domains in production.
+		// TODO: Allow all origins for now. Use specific domains in production.
+		origin: '*',
 		allowMethods: ['POST', 'GET', 'OPTIONS', 'DELETE', 'PATCH'],
-		allowHeaders: ['Content-Type'] // TODO: Ensure the required headers are allowed.
+		// TODO: Ensure the required headers are allowed.
+		allowHeaders: ['Content-Type']
 	})
 );
 
