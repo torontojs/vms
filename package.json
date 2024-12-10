@@ -7,7 +7,7 @@
 		"dev": "wrangler dev src/index.ts",
 		"deploy": "wrangler deploy --minify",
 		"deploy:prod": "wrangler deploy --minify --env production",
-		"format": "dprint fmt",
+		"format": "dprint fmt --staged",
 		"typecheck": "tsc --noEmit",
 		"lint:js": "eslint --fix",
 		"lint": "npm run typecheck && npm run lint:js"
