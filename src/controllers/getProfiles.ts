@@ -1,15 +1,16 @@
-import { Context } from "hono";
-import profiles from "../data/profiles.json";
+import type { Context } from 'hono';
+import profiles from '../data/profiles.json';
+import { StatusCodes } from '../utils/status-codes.ts';
 
-export const getAllProfiles = (c: Context) => {
-  return c.json(profiles, 200);
-};
+export const getAllProfiles = (context: Context) => context.json(profiles, StatusCodes.OKAY);
 
-export const getProfileById = (c: Context) => {
-  const id = c.req.param("id");
-  const profile = profiles.find((p) => p.id === id);
-  if (!profile) {
-    return c.json({ error: "Profile not found" }, 404);
-  }
-  return c.json(profile, 200);
+export const getProfileById = (context: Context) => {
+	const id = context.req.param('id');
+	const profile = profiles.find((currentProfile) => currentProfile.id === id);
+
+	if (!profile) {
+		return context.json({ error: 'Profile not found' }, StatusCodes.NOT_FOUND);
+	}
+
+	return context.json(profile, StatusCodes.OKAY);
 };

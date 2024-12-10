@@ -10,6 +10,7 @@ The VMS is a platform for managing volunteers for Toronto JS and keeping track o
 4. _Provide a hands on experience for our members._ We want members of our community, specially those looking for jobs, to have a project experience.
 
 ## People
+
 - [`@dann`](https://github.com/dxnn): Project Owner
 - [`@madcampos`](https://github.com/madcampos): Project Manager
 - [`@Mariana Rocha`](https://github.com/marianavrocha): Design Lead
