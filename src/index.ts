@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import profilesRoute from './routes/profiles/profiles';
+import teamsRoutes from './routes/profiles/teams';
 
 const app = new Hono();
 
@@ -19,6 +20,7 @@ app.use(
 );
 
 // Existing routes
-app.route('/profile', profilesRoute);
+app.route('/profiles', profilesRoute);
+app.route('/teams', teamsRoutes);
 
 export default app;
