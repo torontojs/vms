@@ -183,6 +183,7 @@ We don't enforce a naming convention for branches, but we encourage it to be mea
 
 We don't enforce a committing standard, but below are some guidelines for commit messages:
 
+- We don't enforce it but highly suggest using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
 - Be descriptive, a commit message tells what happened to that code.
 - Commit messages should aim to "fit in a Tweet". That adds conciseness.
 - The first line of the commit is the summary, use it!
