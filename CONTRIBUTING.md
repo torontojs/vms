@@ -12,7 +12,6 @@ Here is a list of the tools used to develop the project, followed by details on 
 
 - **Required:** [`node.js`](https://nodejs.org/en/download/prebuilt-installer) (Preferably managed by [`volta`](https://docs.volta.sh/guide/getting-started))
 - **Required:** [Commit signing configured](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits), without it, the pull requests **WILL NOT BE ACCEPTED!**
-- **Required:** [`dprint`](https://dprint.dev/install/)
 - _Recommended:_ [VS Code](https://code.visualstudio.com/Download)
 
 ### `node.js` and `volta`
@@ -24,10 +23,6 @@ Our recommendation is using `volta` for managing the node versions, it is alread
 ### Commit signing
 
 In order to improve the trust and security of the code contributed we require that all commits are signed. A tutorial from GitHub on how to configure commit signing is linked above.
-
-### `dprint`
-
-This is our formatter, you must have it installed on your machine to be able to commit code as the formatting process runs before each commit. The install instructions are linked above.
 
 ### VS Code
 
@@ -41,7 +36,7 @@ Once you have cloned the repository, to install the dependencies run:
 npm install --save-dev
 ```
 
-This will install all of the needed dependencies. But please note you will still need to install `dprint` manually.
+This will install all of the needed dependencies.
 
 ## Starting the project
 
