@@ -70,7 +70,7 @@ npm run format
 
 ### Typescript is set to strict mode
 
-The objective is to reduce potential errors and force to write defensive code that handles edge cases and weirdness from javascript.
+The objective is to reduce potential errors and force to write defensive code that handles edge cases and weirdness from JavaScript.
 
 ### Rely on inference when possible
 
@@ -123,7 +123,7 @@ When code is too indirect, that means, you have to jump around multiple function
 
 Most of the time if the code is used only in one place you can simplify this code and remove the extra function.
 
-### Avoid premature DRYness
+### Avoid premature DRY-ness
 
 As much as we like to keep our code tidy and DRY, sometimes mushing things together only gets in the way. So think if it makes sense to actually keep things separate or wait a little bit before combining things.
 
