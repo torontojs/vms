@@ -20,6 +20,7 @@
 		"@types/node": "^22.10.1",
 		"@typescript-eslint/eslint-plugin": "8.16.0",
 		"@typescript-eslint/parser": "8.16.0",
+		"dprint": "0.47.6",
 		"eslint": "9.16.0",
 		"globals": "15.13.0",
 		"husky": "9.1.7",
