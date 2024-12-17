@@ -1,37 +1,32 @@
-# prod
+# Build output
 dist/
 
-# dev
-.yarn/
-!.yarn/releases
-.vscode/*
-!.vscode/launch.json
-!.vscode/*.code-snippets
-.idea/workspace.xml
-.idea/usage.statistics.xml
-.idea/shelf
-
-# deps
+# Dependencies
 node_modules/
-.wrangler
+.wrangler/
 
-# env
-!.env.example
-.env
-.env.production
-.dev.vars
-
-# logs
-logs/
-*.log
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-# misc
+# Environment variables file
+.env
+.env.*
+!.env.example
+
+# MacOS-specific files
 .DS_Store
 
+# VS Code
+.vscode/
 
-notes.txt
+# Server certificates
+certs
+*.pem
+*.crt
+*.key
+
+# Typescript build info
+*.tsbuildinfo

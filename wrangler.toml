@@ -1,11 +1,13 @@
 # Top-level configuration
-name = "vms"
+name = "vms-dev"
 main = "src/index.ts"
 compatibility_date = "2022-07-12"
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = ["nodejs_compat"]
+
+vars = { NODE_ENV = "development", NODE_VERSION = "22.12.0" }
 
 workers_dev = true
 
-[env.dev]
-name = "vms-dev"
-
+[env.production]
+name = "vms"
+vars = { NODE_ENV = "production", NODE_VERSION = "22.12.0" }
