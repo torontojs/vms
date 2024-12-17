@@ -2,10 +2,20 @@
 name = "vms"
 main = "src/index.ts"
 compatibility_date = "2022-07-12"
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = ["nodejs_compat"]
+
+vars = { NODE_ENV = "development", NODE_VERSION = "22.12.0" }
 
 workers_dev = true
 
-[env.dev]
-name = "vms-dev"
+[[d1_databases]]
+binding = "DB" # Binding for development database
+database_name = "vms-d1-database" # Development database name
+database_id = {DATABASE_ID} # Reference the secret directly
+
+
+DATABASE_ID=your_local_database_id wrangler dev
+
+
+
 

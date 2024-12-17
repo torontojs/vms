@@ -2,12 +2,11 @@ import { Hono } from "hono";
 import profilesRoute from "./routes/profiles/profiles"
 import { cors } from "hono/cors";
 
-
 const app = new Hono();
 
 app.get("/", (c) => c.text("Welome to volunteer management system!"));
 
-// CORS middleware
+// CORS middleware22
 app.use(
   "/*",
   cors({

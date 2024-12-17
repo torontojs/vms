@@ -14,4 +14,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   },
+  "include": [
+    "src/**/*.ts", // Include all source files
+    "types/**/*.d.ts" // Include all .d.ts files from the types directory
+  ]
 }
