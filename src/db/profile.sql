@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS profile (
     name TEXT NOT NULL,
     description TEXT,
     happenedAt TEXT NOT NULL,
-    insertedAt TEXT NOT NULL
+    insertedAt TEXT NOT NULL,
+    links TEXT                                                          -- Store markup for social links
 );
