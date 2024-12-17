@@ -1,6 +1,6 @@
 -- Event Log Schema
 CREATE TABLE IF NOT EXISTS event_log (
-    id TEXT PRIMARY KEY,               -- UUID stored as TEXT
+    id TEXT PRIMARY KEY NOT NULL UNIQUE COLLATE BINARY,               -- UUID stored as TEXT
     schemaVersion INTEGER NOT NULL,
     subject TEXT NOT NULL,             -- UUID stored as TEXT (could be user or entity performing the action)
     verb TEXT NOT NULL,                -- Action (e.g., 'CREATE', 'UPDATE', 'DELETE')
