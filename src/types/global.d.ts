@@ -1,3 +1,9 @@
 interface Env {
-    DB_DEV: D1Database;
-  }
+	DB_DEV: D1Database;
+}
+
+interface EnvironmentBindings {
+	Bindings: {
+		database: D1Database
+	}
+}

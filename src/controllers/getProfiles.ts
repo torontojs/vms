@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 import profiles from '../data/profiles.json';
-import { StatusCodes } from '../utils/status-codes.ts';
+import { StatusCodes } from '../constants/status-codes.ts';
 
 export const getAllProfiles = (context: Context) => context.json(profiles, StatusCodes.OKAY);
 

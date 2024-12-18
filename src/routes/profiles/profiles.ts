@@ -9,4 +9,6 @@ profilesRoutes.get('/', getAllProfiles);
 // Route to get a profile by ID
 profilesRoutes.get('/:id', getProfileById);
 
+
+
 export default profilesRoutes;
