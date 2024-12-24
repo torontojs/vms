@@ -1,7 +1,9 @@
-
 import { Hono } from 'hono';
-import { getAllProfiles, getProfileById } from '../../controllers/sqlControllers/getProfiles';
-
+import { deleteProfileById } from 'src/controllers/sqlControllers/deleteProfile';
+import {
+	getAllProfiles,
+	getProfileById
+} from '../../controllers/sqlControllers/getProfiles';
 
 const profilesSqlRoutes = new Hono();
 
@@ -9,9 +11,6 @@ const profilesSqlRoutes = new Hono();
 profilesSqlRoutes.get('/', getAllProfiles);
 
 // Route to get a profile by ID
-profilesSqlRoutes.get('/:id', getProfileById);
+profilesSqlRoutes.get('/:id', getProfileById).delete('/:id', deleteProfileById);
 
 export default profilesSqlRoutes;
-
-
-
