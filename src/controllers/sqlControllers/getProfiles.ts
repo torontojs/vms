@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
 import { StatusCodes } from '../../constants/status-codes.ts';
-import type { Profile } from '../../db/profile';
+import type { Profile } from 'src/types/data/profile';
 
 export const getProfileById = async (context: Context<EnvironmentBindings>) => {
 	const userId = context.req.param("id");
