@@ -13,7 +13,8 @@
 		"lint": "npm run typecheck && npm run lint:js"
 	},
 	"dependencies": {
-		"hono": "^4.6.12"
+		"hono": "^4.6.12",
+		"uuid": "^11.0.3"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20241112.0",
