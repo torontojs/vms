@@ -1,5 +1,5 @@
 import type { Context } from 'hono';
-import { StatusCodes } from '../../constants/status-codes.ts';
+import { StatusCodes } from '../constants/status-codes.ts';
 
 export const deleteProfileById = async (
 	context: Context<EnvironmentBindings>
