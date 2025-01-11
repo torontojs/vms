@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { createProfile } from '../../controllers/createProfile';
 import { deleteProfileById } from '../../controllers/deleteProfile';
 import {
 	getAllProfiles,
@@ -7,10 +8,8 @@ import {
 
 const profilesRoutes = new Hono();
 
-// Route to get all profiles
-profilesRoutes.get('/', getAllProfiles);
+profilesRoutes.get('/', getAllProfiles).post(createProfile);
 
-// Route to get a profile by ID
-profilesRoutes.get('/:id', getProfileById).delete('/:id', deleteProfileById);
+profilesRoutes.get('/:id', getProfileById).delete(deleteProfileById);
 
 export default profilesRoutes;
