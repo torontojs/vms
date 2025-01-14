@@ -1,5 +1,4 @@
 import type { Context } from 'hono';
-import { v4 as uuidv4 } from 'uuid';
 
 import { SCHEMA_VERSION } from 'src/constants/db.ts';
 import { StatusCodes } from 'src/constants/status-codes.ts';
@@ -17,7 +16,7 @@ export const createTeamSql = async (context: Context<EnvironmentBindings>) => {
 			return context.json({ error: 'happenedAt is required to create a team' });
 		}
 
-		const id = uuidv4();
+		const id = crypto.randomUUID(); 
 		const insertedAt = new Date().toISOString();
 		const happenedAt = new Date(body.happenedAt).toISOString();
 
