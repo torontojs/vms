@@ -2,7 +2,7 @@ import type { Context } from 'hono';
 import { StatusCodes } from '../../constants/status-codes.ts';
 import type { Profile } from '../../types/data/profile';
 
-export const getProfileById = async (context: Context<EnvironmentBindings>) => {
+export async function getProfileById(context: Context<EnvironmentBindings>) {
 	const userId = context.req.param("id");
 	try {
 	  const { results } = await context.env.database.prepare(
@@ -16,7 +16,7 @@ export const getProfileById = async (context: Context<EnvironmentBindings>) => {
 	}
   };
 
-  export const getAllProfiles = async (context: Context) => {
+  export async function getAllProfiles(context: Context) {
 	try {
 	  let { results } = await context.env.database.prepare(
 		"SELECT * FROM profiles",
