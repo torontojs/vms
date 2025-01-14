@@ -9,10 +9,10 @@ export const createProfile = async (context: Context<EnvironmentBindings>) => {
 	const body: CreateProfileRequestBody = await context.req.json();
 
 	try {
+		// TODO : email, name length, links http format, happpendAt iso format
+		// validateCreateProfileRequestBody(body);
+
 		const id = crypto.randomUUID();
-
-		validateCreateProfileRequestBody(body);
-
 		const {
 			email,
 			name,
@@ -20,22 +20,21 @@ export const createProfile = async (context: Context<EnvironmentBindings>) => {
 			links,
 			happenedAt
 		} = body;
-
 		const insertedAt = new Date().toISOString();
 
 		const result = await context.env.database
-			.prepare('INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion) VALUES (?,?,?,?,?,?,?,?)')
+			.prepare(`
+				INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
+				VALUES (?,?,?,?,?,?,?,?)`)
 			.bind(id, email, name, description, links, happenedAt, insertedAt, SCHEMA_VERSION)
 			.run();
 
-		console.log(result);
+		if (result.error) {
+			throw Error(`INSERT error: ${result.error}`);
+		}
 
 		return context.json({});
 	} catch (error) {
 		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
 };
-
-function validateCreateProfileRequestBody(body: CreateProfileRequestBody) {
-	body.email;
-}
