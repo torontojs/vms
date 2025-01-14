@@ -4,7 +4,7 @@ import { SCHEMA_VERSION } from 'src/constants/db.ts';
 import { StatusCodes } from 'src/constants/status-codes.ts';
 import type { TeamCreateBody } from 'src/types/data/team';
 
-export const createTeamSql = async (context: Context<EnvironmentBindings>) => {
+export function async createTeamSql(context: Context<EnvironmentBindings>) {
 	try {
 		const body: TeamCreateBody = await context.req.json();
 
