@@ -20,7 +20,7 @@ export function async createTeamSql(context: Context<EnvironmentBindings>) {
 		const insertedAt = new Date().toISOString();
 		const happenedAt = new Date(body.happenedAt).toISOString();
 
-		await context.env.database.prepare(
+		const createTeam = await context.env.database.prepare(
 			'INSERT INTO team (id, name, schemaVersion, description, happenedAt, insertedAt) VALUES (?,?,?,?,?,?)'
 		)
 			.bind(id, body.name, SCHEMA_VERSION, body.description ?? '', happenedAt, insertedAt)
