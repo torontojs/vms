@@ -9,11 +9,11 @@ export function async createTeamSql(context: Context<EnvironmentBindings>) {
 		const body: TeamCreateBody = await context.req.json();
 
 		if (!body.name) {
-			return context.json({ error: 'name is required to create a team' }, StatusCodes.INTERNAL_SERVER_ERROR);
+			throw Error('name is required to create a team');
 		}
 
 		if (!body.happenedAt) {
-			return context.json({ error: 'happenedAt is required to create a team' });
+			throw Error('happenedAt is required to create a team');
 		}
 
 		const id = crypto.randomUUID(); 
