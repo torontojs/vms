@@ -2,10 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import profilesRoute from './routes/profiles/profiles';
 import teamsRoutes from './routes/teams/teams';
-import profilesSqlRoute from './routes/profiles/profilesSql';
 import teamsSqlRoute from './routes/teams/teamsSql';
-
-
 
 const app = new Hono();
 
@@ -23,12 +20,10 @@ app.use(
 	})
 );
 
-// Existing routes
 app.route('/profiles', profilesRoute);
-app.route('/teams', teamsRoutes);
 
-app.route('/sql/profiles', profilesSqlRoute);
+// TODO: should be changed to interact with real DB
 app.route('/sql/teams', teamsSqlRoute);
-
+app.route('/teams', teamsRoutes);
 
 export default app;

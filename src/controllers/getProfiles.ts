@@ -1,16 +1,26 @@
 import type { Context } from 'hono';
-import profiles from '../data/profiles.json';
 import { StatusCodes } from '../constants/status-codes.ts';
 
-export const getAllProfiles = (context: Context) => context.json(profiles, StatusCodes.OKAY);
-
-export const getProfileById = (context: Context) => {
-	const id = context.req.param('id');
-	const profile = profiles.find((currentProfile) => currentProfile.id === id);
-
-	if (!profile) {
-		return context.json({ error: 'Profile not found' }, StatusCodes.NOT_FOUND);
+export const getProfileById = async (context: Context<EnvironmentBindings>) => {
+	const userId = context.req.param('id');
+	try {
+		const { results } = await context.env.database
+			.prepare('SELECT * FROM profile WHERE id = ?')
+			.bind(userId)
+			.run();
+		return context.json(results);
+	} catch (e) {
+		return context.json({ err: e.message }, StatusCodes.NOT_FOUND);
 	}
+};
 
-	return context.json(profile, StatusCodes.OKAY);
+export const getAllProfiles = async (context: Context) => {
+	try {
+		const { results } = await context.env.database
+			.prepare('SELECT * FROM profile')
+			.all();
+		return context.json(results);
+	} catch (e) {
+		return context.json({ err: e.message }, StatusCodes.NOT_FOUND);
+	}
 };

@@ -1,5 +1,9 @@
 import { Hono } from 'hono';
-import { getAllProfiles, getProfileById } from '../../controllers/getProfiles';
+import { deleteProfileById } from '../../controllers/deleteProfile';
+import {
+	getAllProfiles,
+	getProfileById
+} from '../../controllers/getProfiles';
 
 const profilesRoutes = new Hono();
 
@@ -7,8 +11,6 @@ const profilesRoutes = new Hono();
 profilesRoutes.get('/', getAllProfiles);
 
 // Route to get a profile by ID
-profilesRoutes.get('/:id', getProfileById);
-
-
+profilesRoutes.get('/:id', getProfileById).delete('/:id', deleteProfileById);
 
 export default profilesRoutes;
