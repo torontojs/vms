@@ -1,10 +1,9 @@
 import type { Context } from 'hono';
-
 import { StatusCodes } from 'src/constants/status-codes.ts';
 
-export const deleteTeamById = async (
+export async function deleteTeamById(
 	context: Context<EnvironmentBindings>
-) => {
+) {
 	const teamId = context.req.param('id');
 
 	try {
@@ -14,7 +13,7 @@ export const deleteTeamById = async (
 			.run();
 
 		if (results.meta.changes === 0) {
-			return context.json({ err: 'Team not found' }, StatusCodes.NOT_FOUND);
+			throw new Error(`Team not found, Error ${StatusCodes.NOT_FOUND}`);
 		}
 
 		return context.json({ message: 'Team deleted successfully' }, StatusCodes.OKAY);
