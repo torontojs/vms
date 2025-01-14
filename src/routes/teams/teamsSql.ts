@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
-import { createTeamSql } from 'src/controllers/sqlControllers/createTeam';
-import { deleteTeamById } from 'src/controllers/sqlControllers/deleteTeam';
-import { getAllTeamsSql, getTeamByIdSql } from 'src/controllers/sqlControllers/getTeams';
-import { updateTeamById } from 'src/controllers/sqlControllers/updateTeam';
+import { createTeamSql } from '../../controllers/sqlControllers/createTeam';
+import { deleteTeamById } from '../../controllers/sqlControllers/deleteTeam';
+import { getAllTeamsSql, getTeamByIdSql } from '../../controllers/sqlControllers/getTeams';
+import { updateTeamById } from '../../controllers/sqlControllers/updateTeam';
 
 const teamsSqlRoute = new Hono();
 
