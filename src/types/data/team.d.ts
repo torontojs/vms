@@ -7,7 +7,7 @@ export interface Team {
 	insertedAt: string;
 }
 
-export interface TeamCreateBody {
+export interface NewTeamData {
 	name: string;
 	happenedAt: string;
 	description?: string;
