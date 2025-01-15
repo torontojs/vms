@@ -13,7 +13,7 @@ export interface NewTeamData {
 	description?: string;
 }
 
-export interface TeamUpdateBody {
+export interface UpdateTeamData {
 	name?: string;
 	happenedAt?: string;
 	description?: string;
