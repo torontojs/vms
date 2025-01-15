@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { StatusCodes } from 'src/constants/status-codes.ts';
 import { Context } from 'hono';
+import { SCHEMA_VERSION } from 'src/constants/db.ts';
+import { BaseTeamData } from 'src/types/data/team'; // Import BaseTeamData
 
 // Validator for team creation body
 const TeamCreateSchema = z.object({
@@ -9,8 +11,10 @@ const TeamCreateSchema = z.object({
   description: z.string().optional(),
 });
 
+export type TeamCreateBody = z.infer<typeof TeamCreateSchema>;
+
 // Service: Handles the database operation
-async function createTeamInDb(database: any, id: string, body: any) {
+async function createTeamInDb(database: any, id: string, body: TeamCreateBody) {
   const insertedAt = new Date().toISOString();
   const happenedAt = new Date(body.happenedAt).toISOString();
 
@@ -36,8 +40,10 @@ export async function createTeamSql(context: Context<EnvironmentBindings>) {
   }
 }
 
+// Validator for team ID (reuse if necessary)
+const TeamIdSchema = z.string().uuid('Invalid team ID');
 
-// Service: Handles the database operation
+// Service: Handles the database operation for deletion
 async function deleteTeamFromDb(database: any, teamId: string): Promise<boolean> {
   const results = await database
     .prepare('DELETE FROM team WHERE id = ?')
