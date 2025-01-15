@@ -25,13 +25,8 @@ export function async createTeamSql(context: Context<EnvironmentBindings>) {
 		)
 			.bind(id, body.name, SCHEMA_VERSION, body.description ?? '', happenedAt, insertedAt)
 			.run();
-		const createdTeam = await context.env.database.prepare(
-			'SELECT * FROM team WHERE id = ?'
-		)
-			.bind(id)
-			.first();
 
-		return context.json(createdTeam);
+		return context.json(createTeam);
 	} catch (err) {
 		return context.json({ err: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
