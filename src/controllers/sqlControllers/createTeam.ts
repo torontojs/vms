@@ -1,33 +1,40 @@
-import type { Context } from 'hono';
-
+import { z } from 'zod';
+import { Context } from 'hono';
 import { SCHEMA_VERSION } from 'src/constants/db.ts';
 import { StatusCodes } from 'src/constants/status-codes.ts';
-import type { TeamCreateBody } from 'src/types/data/team';
 
-export function async createTeamSql(context: Context<EnvironmentBindings>) {
-	try {
-		const body: TeamCreateBody = await context.req.json();
+// Validator (Zod)
+const TeamCreateSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  happenedAt: z.string().min(1, 'HappenedAt is required'),
+  description: z.string().optional(),
+});
 
-		if (!body.name) {
-			throw Error('name is required to create a team');
-		}
+export type TeamCreateBody = z.infer<typeof TeamCreateSchema>;
 
-		if (!body.happenedAt) {
-			throw Error('happenedAt is required to create a team');
-		}
+// SQL Handler
+async function createTeamInDb(database: any, id: string, body: TeamCreateBody) {
+  const insertedAt = new Date().toISOString();
+  const happenedAt = new Date(body.happenedAt).toISOString();
 
-		const id = crypto.randomUUID(); 
-		const insertedAt = new Date().toISOString();
-		const happenedAt = new Date(body.happenedAt).toISOString();
+  return await database.prepare(
+    'INSERT INTO team (id, name, schemaVersion, description, happenedAt, insertedAt) VALUES (?,?,?,?,?,?)'
+  )
+    .bind(id, body.name, SCHEMA_VERSION, body.description ?? '', happenedAt, insertedAt)
+    .run();
+}
 
-		const createTeam = await context.env.database.prepare(
-			'INSERT INTO team (id, name, schemaVersion, description, happenedAt, insertedAt) VALUES (?,?,?,?,?,?)'
-		)
-			.bind(id, body.name, SCHEMA_VERSION, body.description ?? '', happenedAt, insertedAt)
-			.run();
+// Request Handler
+export async function createTeamSql(context: Context<EnvironmentBindings>) {
+  try {
+    const body = await context.req.json();
+    const parsedBody = TeamCreateSchema.parse(body); // Validate body with Zod
 
-		return context.json(createTeam);
-	} catch (err) {
-		return context.json({ err: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
-	}
-};
+    const id = crypto.randomUUID();
+    await createTeamInDb(context.env.database, id, parsedBody);
+
+    return context.json({ message: 'Team created successfully' }, StatusCodes.CREATED);
+  } catch (err) {
+    return context.json({ err: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
