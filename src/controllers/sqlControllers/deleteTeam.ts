@@ -1,23 +1,30 @@
-import type { Context } from 'hono';
 import { StatusCodes } from 'src/constants/status-codes.ts';
+import { Context } from 'hono';
 
-export async function deleteTeamById(
-	context: Context<EnvironmentBindings>
-) {
-	const teamId = context.req.param('id');
+// Service: Handles the database operation
+async function deleteTeamFromDb(database: any, teamId: string): Promise<boolean> {
+  const results = await database
+    .prepare('DELETE FROM team WHERE id = ?')
+    .bind(teamId)
+    .run();
 
-	try {
-		const results = await context.env.database
-			.prepare('DELETE FROM team WHERE id = ?')
-			.bind(teamId)
-			.run();
+  return results.meta.changes > 0; // Returns true if rows were deleted, false otherwise.
+}
 
-		if (results.meta.changes === 0) {
-			throw new Error(`Team not found, Error ${StatusCodes.NOT_FOUND}`);
-		}
+// Handler: Processes the request and sends a response
+export async function deleteTeamById(context: Context<EnvironmentBindings>) {
+  const teamId = context.req.param('id');
 
-		return context.json({ message: 'Team deleted successfully' }, StatusCodes.OKAY);
-	} catch (error) {
-		return context.json({ err: error.message }, StatusCodes.NOT_FOUND);
-	}
-};
+  try {
+    const deleted = await deleteTeamFromDb(context.env.database, teamId);
+
+    if (!deleted) {
+      return context.json({ error: 'Team not found' }, StatusCodes.NOT_FOUND);
+    }
+
+    return context.json({ message: 'Team deleted successfully' }, StatusCodes.OKAY);
+  } catch (error) {
+    return context.json({ error: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
