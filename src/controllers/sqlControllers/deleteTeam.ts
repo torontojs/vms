@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { StatusCodes } from './../constants/status-codes.ts';
+import { StatusCodes } from '../../constants/status-codes.ts';
 import { Context } from 'hono';
 
 // Validator for team ID
