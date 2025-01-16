@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { Context } from 'hono';
-import { SCHEMA_VERSION } from 'src/constants/db.ts';
-import { StatusCodes } from 'src/constants/status-codes.ts';
-import { BaseTeamData } from 'src/types/data/team'; // Import BaseTeamData
+import { SCHEMA_VERSION } from '../../constants/db.ts';
+import { StatusCodes } from '../../constants/status-codes.ts';
+import { BaseTeamData } from '../../types/data/team'; // Import BaseTeamData
 
 // Validator (Zod) for the core fields in BaseTeamData
 const TeamCreateSchema = z.object({
