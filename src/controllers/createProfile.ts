@@ -5,7 +5,7 @@ import type { Profile } from 'src/types/data/profile';
 
 type CreateProfileRequestBody = Omit<Profile, 'id' | 'schemaVersion'>;
 
-export const createProfile = async (context: Context<EnvironmentBindings>) => {
+export async function createProfile(context: Context<EnvironmentBindings>) {
 	const body: CreateProfileRequestBody = await context.req.json();
 
 	try {
@@ -22,19 +22,19 @@ export const createProfile = async (context: Context<EnvironmentBindings>) => {
 		} = body;
 		const insertedAt = new Date().toISOString();
 
-		const result = await context.env.database
+		const { success } = await context.env.database
 			.prepare(`
 				INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
 				VALUES (?,?,?,?,?,?,?,?)`)
 			.bind(id, email, name, description, links, happenedAt, insertedAt, SCHEMA_VERSION)
 			.run();
 
-		if (result.error) {
-			throw Error(`INSERT error: ${result.error}`);
+		if (!success) {
+			throw Error(`INSERT query error`);
 		}
 
 		return context.json({});
 	} catch (error) {
 		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
-};
+}
