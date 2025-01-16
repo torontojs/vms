@@ -22,7 +22,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 		} = body;
 		const insertedAt = new Date().toISOString();
 
-		const { success } = await context.env.database
+		const { success, meta } = await context.env.database
 			.prepare(`
 				INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
 				VALUES (?,?,?,?,?,?,?,?)`)
@@ -33,7 +33,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 			throw Error(`INSERT query error`);
 		}
 
-		return context.json({});
+		return context.json({ createdId: meta.last_row_id });
 	} catch (error) {
 		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
