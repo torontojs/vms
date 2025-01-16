@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { StatusCodes } from 'src/constants/status-codes.ts';
+import { StatusCodes } from '../../constants/status-codes.ts';
 import type { Context } from 'hono';
-import type { TeamUpdateBody } from 'src/types/data/team';
+import type { TeamUpdateBody } from '../../types/data/team';
 
 // Zod schema for validating the `id` parameter
 const TeamIdSchema = z.string().uuid('Invalid team ID format');
