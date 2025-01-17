@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { StatusCodes } from '../../constants/status-codes.ts';
+import { StatusCodes } from '../../../constants/status-codes.ts';
 import type { Context } from 'hono';
-import type { TeamUpdateBody } from '../../types/data/team';
+import type { UpdateTeamData } from '../../../types/data/team';
 
 // Zod schema for validating the `id` parameter
 const TeamIdSchema = z.string().uuid('Invalid team ID format');
@@ -14,9 +14,9 @@ const TeamUpdateBodySchema = z.object({
 });
 
 // Service: Handles the database operation
-async function updateTeamInDb(database: any, teamId: string, body: TeamUpdateBody) {
+async function updateTeamInDb(database: D1Database, teamId: string, body: UpdateTeamData) {
   const updateFields: string[] = [];
-  const updateValues: any[] = [];
+  const updateValues: unknown[] = [];
 
   if (body.name) {
     updateFields.push('name = ?');
@@ -42,7 +42,7 @@ async function updateTeamInDb(database: any, teamId: string, body: TeamUpdateBod
     .bind(...updateValues)
     .run();
 
-  return results.meta.changes > 0; // Returns true if rows were updated, false otherwise
+  return results.meta.changes > 0;
 }
 
 // Handler: Processes the request and sends a response
@@ -53,8 +53,8 @@ export const updateTeamById = async (context: Context<EnvironmentBindings>) => {
     TeamIdSchema.parse(teamId);
 
     // Validate body content using Zod
-    const body: TeamUpdateBody = await context.req.json();
-    const parsedBody = TeamUpdateBodySchema.parse(body); // Ensure body follows schema
+    const body: UpdateTeamData = await context.req.json();
+    const parsedBody = TeamUpdateBodySchema.parse(body);
 
     const updated = await updateTeamInDb(context.env.database, teamId, parsedBody);
 

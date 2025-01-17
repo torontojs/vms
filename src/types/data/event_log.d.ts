@@ -1,4 +1,4 @@
-export type LogItemSource = 'profile' | 'team' | 'role' | 'special';
+export type LogItemSource = 'profile' | 'role' | 'special' | 'team';
 
 export interface EventLog {
 	id: string;

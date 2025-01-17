@@ -19,4 +19,4 @@ export interface UpdateTeamData {
   description?: string;
 }
 
-export type BaseTeamData = Pick<Team, 'name' | 'happenedAt' | 'description'>;
+export type BaseTeamData = Pick<Team, 'description' | 'happenedAt' | 'name'>;

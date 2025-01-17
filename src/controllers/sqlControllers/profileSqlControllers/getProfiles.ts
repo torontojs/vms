@@ -1,23 +1,31 @@
 import { z } from 'zod';
 import { StatusCodes } from 'src/constants/status-codes.ts';
-import { Context } from 'hono';
+import type { Context } from 'hono';
 import type { Profile } from 'src/types/data/profile';
 
 // Zod schema for validating the `id` parameter
 const ProfileIdSchema = z.string().uuid('Invalid profile ID format');
 
-// Service: Handles database operations for fetching profiles
-async function getProfileFromDb(database: any, userId: string): Promise<Profile | null> {
-  const { results } = await database
+async function getProfileFromDb(database: D1Database, userId: string) {
+  const { success, results } = await database
     .prepare('SELECT * FROM profiles WHERE id = ?')
     .bind(userId)
     .run<Profile>();
+  
+  if (!success) {
+    throw new Error('Error querying the database');
+  }
 
-  return results.length > 0 ? results[0] : null; // Return first result or null if not found
+  return results[0];
 }
 
-async function getAllProfilesFromDb(database: any): Promise<Profile[]> {
-  const { results } = await database.prepare('SELECT * FROM profiles').all<Profile>();
+async function getAllProfilesFromDb(database: D1Database) {
+  const { success,results } = await database.prepare('SELECT * FROM profiles').all<Profile>();
+
+  if (!success) {
+    throw new Error('Error querying the database');
+  }
+
   return results;
 }
 
@@ -36,7 +44,7 @@ export const getProfileById = async (context: Context<EnvironmentBindings>) => {
 
     return context.json(profile);
   } catch (err) {
-    return context.json({ err: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
+    return context.json({ error: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -45,7 +53,7 @@ export const getAllProfiles = async (context: Context<EnvironmentBindings>) => {
   try {
     const profiles = await getAllProfilesFromDb(context.env.database);
     return context.json(profiles);
-  } catch (e) {
-    return context.json({ err: e.message }, StatusCodes.INTERNAL_SERVER_ERROR);
+  } catch (err) {
+    return context.json({ error: err.message }, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
