@@ -33,7 +33,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 			throw Error(`INSERT query error`);
 		}
 
-		return context.json({ createdId: meta.last_row_id });
+		return context.json({ message: 'Profile created successfully', createdId: meta.last_row_id }, StatusCodes.CREATED);
 	} catch (error) {
 		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
