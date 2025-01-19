@@ -1,16 +1,24 @@
 import type { Context } from 'hono';
 import { StatusCodes } from 'src/constants/status-codes';
 import { SCHEMA_VERSION } from 'src/db/constants';
-import type { Profile } from 'src/types/data/profile';
+import { z, ZodError } from 'zod';
 
-type CreateProfileRequestBody = Omit<Profile, 'id' | 'schemaVersion'>;
+const CreateProfileSchema = z.object({
+	email: z.string({ required_error: 'Email is required' }).email('Invalid Email'),
+	name: z.string({ required_error: 'Name is required' }).min(1, 'Name should me 1 or more characters'),
+	description: z.string().optional(),
+	happenedAt: z.string().datetime('HappenedAt should be ISO date string format'),
+	links: z.string().url('Invalid url').optional()
+});
+
+type CreateProfileRequestBody = z.infer<typeof CreateProfileSchema>;
 
 export async function createProfile(context: Context<EnvironmentBindings>) {
 	const body: CreateProfileRequestBody = await context.req.json();
 
 	try {
 		// TODO : email, name length, links http format, happpendAt iso format
-		// validateCreateProfileRequestBody(body);
+		const parsedBody = CreateProfileSchema.parse(body);
 
 		const id = crypto.randomUUID();
 		const {
@@ -19,7 +27,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 			description,
 			links,
 			happenedAt
-		} = body;
+		} = parsedBody;
 		const insertedAt = new Date().toISOString();
 
 		const { success, meta } = await context.env.database
@@ -35,6 +43,12 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 
 		return context.json({ message: 'Profile created successfully', createdId: meta.last_row_id }, StatusCodes.CREATED);
 	} catch (error) {
+		if (error instanceof ZodError) {
+			return context.json({
+				err: error.issues.map((issue) => issue.message).join(', ')
+			}, StatusCodes.BAD_REQUEST);
+		}
+
 		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
 }
