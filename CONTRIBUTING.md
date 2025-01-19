@@ -173,6 +173,110 @@ function fetchUserAvatar(userId: string) {
 const DEFAULT_TIMEOUT_IN_SECONDS = 5;
 ```
 
+### Favoring function declaration over function expressions
+
+In general, we want to prefer function declarations for a couple reasons:
+
+- They are [hoisted](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), so they avoid errors coming from the [Temporal Dead Zone](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#temporal_dead_zone_tdz)
+- Arrow functions, in particular, can create issues with [the binding of `this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#cannot_be_used_as_methods).
+
+As a rule of thumb:
+
+- If it has a name, use a regular function declaration.
+- If it is used as a "one off" anonymous function (e.g.: as an argument for `Array.map`), use an arrow function expression.
+
+### Prefer throwing errors, and handle them only at the top-most level
+
+As a general idea, we want to cascade and propagate errors to the outermost layer. That way, if something goes wrong, the code breaks and don't execute more than expected and the error propagates to a place that can handle it properly.
+
+In practical terms, it means request handlers will be the place where error handling happens generally, and then other pieces of code should throw errors.
+
+Note that subclassing of errors to add more metadata, it is also an interesting way to help the handling of specific types of errors.
+
+Here is an example of subclassing:
+
+```typescript
+class DataValidationError extends Error {
+	statusCode: number;
+
+	constructor(message: string, statusCode: number) {
+		super(message);
+
+		this.statusCode = statusCode;
+	}
+}
+
+function dataValidation() {
+	throw new DataValidationError('Invalid data', 400);
+}
+
+function requestHandler(context: HonoContext) {
+	try {
+		dataValidation();
+	} catch (err) {
+		// This is a validation error, so we have the status code available
+		if (err instanceof DataValidationError) {
+			return context.json({ error: err.message }, err.statusCode);
+		}
+
+		// This is a regular error, so it may be comming from somewhere else.
+		// Here we treat it like a server error.
+		return context.json({ error: err.message }, 500);
+	}
+}
+```
+
+An exception to this is when we want to silently ignore errors, or we want to handle things differently even if an error occurs, like adding a default return. On that case it is okay to use `try..catch` in other places.
+
+### Use relative imports
+
+Imports on the web only recognize URLs. "Bare imports" is a thing that started with node and then it evolved into import maps.
+
+URL imports basically come down to those 3 ways of referencing an import:
+
+- A relative import that start with `./` or `../`;
+- An absolute import that starts with `/`, and points to the base domain;
+- An absolute URL to a different domain, that starts with `https://`.
+
+Think about it as the path to an image or CSS file, it is the same things.
+
+When we do it for the project, it keeps consistency and compatibility with the web and reduces the amount of "translation" needed to reference a file.
+
+The drawbacks are that if we move a file around it changes everything that depends on that file, and we have to update all of the imports; and that reading a file import can be "wonky" like `../../some/folder/file.ts`.
+
+The good part is that it improves discoverability of dependencies because everything is made _more explicit_.
+
+So, what about [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)? They are a neat tool to help make bare imports work on the web. But they add a layer of complexity and indirection. There is no easy way to tell "where does this come from?"
+
+As a general guideline:
+
+- All code that is ours should use relative imports to make it easier to reason about.
+- We should not use absolute imports (i.e. the ones starting with `/`) because transforms, bundling and all other things may break the paths.
+- All _external dependencies_ should use bare imports. For those we want to keep the node style.
+
+This helps create consistency and differentiation of internal vs external code and keep our dependencies transparent to us, it doesn't matter much where they come from in the end.
+
+### Separation of concerns and "super functions"
+
+To make the code more legible and easier to understand, we should base ourselves on the [UNIX philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) and write functions that only handle _one thing_.
+
+Two thing to understand here are:
+
+- "One thing" can also be orchestration of other functions
+- Related logic should be grouped together
+
+That means that code should always be contained into a "single unit" responsible for handling a flow, as an orchestrator, or part of that flow.
+
+One example here are request handlers, we should split the code in three parts:
+
+- The request handler itself, responsible for dealing with checks for headers, content type and body parsing.
+- A data validation function that will validate all the cases and formats for the data, including it being null, missing properties, etc.
+- A data processing handler that receives valid data as an input and outputs the result of saving that data to a database, or executing some logic with that data.
+
+Having this organization, help to write more testable function without resorting to complex hacks like mocks; and to follow the code more easily, as the code should read as series of steps that can be expanded upon if needed, but you get the general idea from just scanning the code.
+
+One thing to keep in mind here is to be contentious of how much the code is broken into small pieces, we want to strike a balance between writing a "super function" with everything inside and writing many small functions that makes reading the code feel like hopping around in circles.
+
 ## Branches and forks
 
 When you are working in a feature it is better to work on a separate branch, that makes the code contained and easier to test by others. If you have access to directly create branches from the repository, do it, if you don't create a fork and then create a new branch.
