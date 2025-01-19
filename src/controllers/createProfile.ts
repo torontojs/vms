@@ -1,13 +1,19 @@
 import type { Context } from 'hono';
 import { StatusCodes } from 'src/constants/status-codes';
-import { SCHEMA_VERSION } from 'src/db/constants';
+import { insertProfile } from 'src/db/profile';
 import { z, ZodError } from 'zod';
 
 const CreateProfileSchema = z.object({
-	email: z.string({ required_error: 'Email is required' }).email('Invalid Email'),
-	name: z.string({ required_error: 'Name is required' }).min(1, 'Name should me 1 or more characters'),
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email('Invalid Email'),
+	name: z
+		.string({ required_error: 'Name is required' })
+		.min(1, 'Name should me 1 or more characters'),
 	description: z.string().optional(),
-	happenedAt: z.string().datetime('HappenedAt should be ISO date string format'),
+	happenedAt: z
+		.string({ required_error: 'HappenedAt is required' })
+		.datetime('HappenedAt should be ISO date string format'),
 	links: z.string().url('Invalid url').optional()
 });
 
@@ -17,38 +23,33 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 	const body: CreateProfileRequestBody = await context.req.json();
 
 	try {
-		// TODO : email, name length, links http format, happpendAt iso format
 		const parsedBody = CreateProfileSchema.parse(body);
-
-		const id = crypto.randomUUID();
-		const {
-			email,
-			name,
-			description,
-			links,
-			happenedAt
-		} = parsedBody;
-		const insertedAt = new Date().toISOString();
-
-		const { success, meta } = await context.env.database
-			.prepare(`
-				INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
-				VALUES (?,?,?,?,?,?,?,?)`)
-			.bind(id, email, name, description, links, happenedAt, insertedAt, SCHEMA_VERSION)
-			.run();
+		const { success, meta } = await insertProfile({
+			payload: parsedBody,
+			database: context.env.database
+		});
 
 		if (!success) {
-			throw Error(`INSERT query error`);
+			throw new Error('Insertion failed');
 		}
 
-		return context.json({ message: 'Profile created successfully', createdId: meta.last_row_id }, StatusCodes.CREATED);
+		return context.json(
+			{ message: 'Profile created successfully', createdId: meta.last_row_id },
+			StatusCodes.CREATED
+		);
 	} catch (error) {
 		if (error instanceof ZodError) {
-			return context.json({
-				err: error.issues.map((issue) => issue.message).join(', ')
-			}, StatusCodes.BAD_REQUEST);
+			return context.json(
+				{
+					err: error.issues.map((issue) => issue.message).join(', ')
+				},
+				StatusCodes.BAD_REQUEST
+			);
 		}
 
-		return context.json({ err: error.message }, StatusCodes.INTERNAL_SERVER_ERROR);
+		return context.json(
+			{ err: error.message },
+			StatusCodes.INTERNAL_SERVER_ERROR
+		);
 	}
 }
