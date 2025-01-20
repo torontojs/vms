@@ -7,7 +7,9 @@ import type { BaseTeamData } from '../../../types/data/team';
 // Validator (Zod) for the core fields in BaseTeamData
 const TeamCreateSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  happenedAt: z.string().min(1, 'HappenedAt is required'),
+  happenedAt: z.string().min(1, 'HappenedAt is required').refine((val) => !isNaN(Date.parse(val)), {
+    message: 'HappenedAt must be a valid ISO 8601 date string',
+  }),
   description: z.string().optional(),
 });
 

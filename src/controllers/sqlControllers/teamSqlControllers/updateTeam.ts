@@ -6,12 +6,17 @@ import type { UpdateTeamData } from '../../../types/data/team';
 // Zod schema for validating the `id` parameter
 const TeamIdSchema = z.string().uuid('Invalid team ID format');
 
-// Zod schema for validating the body of the update request
 const TeamUpdateBodySchema = z.object({
-  name: z.string().optional(),
-  description: z.string().optional(),
-  happenedAt: z.string().optional(),
+  name: z.string().optional(), 
+  description: z.string().optional(), 
+  happenedAt: z.string().optional().refine((val) => {
+    if (val) {return !isNaN(Date.parse(val));}  
+    return true;
+  }, {
+    message: 'HappenedAt must be a valid ISO 8601 date string',
+  })
 });
+
 
 // Service: Handles the database operation
 async function updateTeamInDb(database: D1Database, teamId: string, body: UpdateTeamData) {

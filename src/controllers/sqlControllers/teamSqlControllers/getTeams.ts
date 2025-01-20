@@ -5,15 +5,19 @@ import type { Context } from 'hono';
 // Zod schema for validating the `id` parameter in getTeamByIdSql
 const TeamIdSchema = z.string().uuid('Invalid team ID format');
 
-// Zod schema for validating the structure of the data returned by the database
 const TeamSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string(),
-  schemaVersion: z.number(),
-  description: z.string().optional(),
-  happenedAt: z.string(),
-  insertedAt: z.string(),
+  id: z.string().uuid(), 
+  name: z.string().min(1, 'Name is required'), 
+  schemaVersion: z.number().int().min(1, 'Schema version must be a positive integer'),  
+  description: z.string().optional(),  
+  happenedAt: z.string().min(1, 'HappenedAt is required').refine((val) => !isNaN(Date.parse(val)), {
+    message: 'HappenedAt must be a valid ISO 8601 date string',
+  }),  
+  insertedAt: z.string().min(1, 'InsertedAt is required').refine((val) => !isNaN(Date.parse(val)), {
+    message: 'InsertedAt must be a valid ISO 8601 date string',
+  }),  
 });
+
 
 // SQL Query for getting all teams
 async function getAllTeamsFromDb(database: D1Database) {
