@@ -9,8 +9,8 @@ export const getProfileById = async (context: Context<EnvironmentBindings>) => {
 			.bind(userId)
 			.run();
 		return context.json(results);
-	} catch (e) {
-		return context.json({ err: e.message }, StatusCodes.NOT_FOUND);
+	} catch (err) {
+		return context.json({ error: err.message }, StatusCodes.NOT_FOUND);
 	}
 };
 
@@ -20,7 +20,7 @@ export const getAllProfiles = async (context: Context) => {
 			.prepare('SELECT * FROM profile')
 			.all();
 		return context.json(results);
-	} catch (e) {
-		return context.json({ err: e.message }, StatusCodes.NOT_FOUND);
+	} catch (err) {
+		return context.json({ error: err.message }, StatusCodes.NOT_FOUND);
 	}
 };
