@@ -81,4 +81,9 @@
 	"typescript.preferences.preferTypeOnlyAutoImports": true,
 	"typescript.preferences.quoteStyle": "single",
 	"typescript.preferences.useAliasesForRenames": true,
+	"prettier.enable": false,
+	"prettier.requireConfig": true,
+	"prettier.requirePragma": true,
+	"prettier.tabWidth": 4,
+	"prettier.useTabs": true
 }
