@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export interface Profile {
 	id: string;
 	email: string;
