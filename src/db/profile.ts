@@ -2,7 +2,7 @@ import { SCHEMA_VERSION } from 'src/db/constants';
 import type { Profile } from 'src/types/data/profile';
 
 interface InsertProfileParams {
-	payload: Omit<Profile, 'id' | 'insertedAt' | 'schemaVersion'>;
+	payload: Pick<Profile, 'description' | 'email' | 'happenedAt' | 'links' | 'name'>;
 	database: D1Database;
 }
 
