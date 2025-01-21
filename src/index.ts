@@ -11,8 +11,11 @@ app.get('/', (context) => context.text('Welome to volunteer management system!')
 app.use(
 	'/*',
 	cors({
-		// FIXME: We want to block origins external to Toronto JS
-		origin: '*',
+		origin: (origin) => {
+			// Restrict access to specific domains
+			const allowedOrigins = ['https://torontojs.com', 'https://api.torontojs.com'];
+			return allowedOrigins.includes(origin || '') ? origin : null;
+		},
 		allowMethods: ['POST', 'GET', 'OPTIONS', 'DELETE', 'PATCH'],
 		allowHeaders: ['Content-Type']
 	})
