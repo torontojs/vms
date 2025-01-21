@@ -5,5 +5,5 @@ interface Env {
 interface EnvironmentBindings {
 	Bindings: {
 		database: D1Database
-	}
+	};
 }

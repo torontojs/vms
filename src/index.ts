@@ -1,8 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import profilesRoute from './routes/profiles/profiles';
-import teamsRoutes from './routes/teams/teams';
-import teamsSqlRoute from './routes/teams/teamsSql';
+import { profileRoutes } from './routes/profile/index.ts';
+import { teamRoutes } from './routes/team/index.ts';
 
 const app = new Hono();
 
@@ -12,14 +11,14 @@ app.get('/', (context) => context.text('Welome to volunteer management system!')
 app.use(
 	'/*',
 	cors({
+		// FIXME: We want to block origins external to Toronto JS
 		origin: '*',
 		allowMethods: ['POST', 'GET', 'OPTIONS', 'DELETE', 'PATCH'],
 		allowHeaders: ['Content-Type']
 	})
 );
 
-app.route('/profiles', profilesRoute);
-app.route('/sql/teams', teamsSqlRoute);
-app.route('/teams', teamsRoutes);
+app.route('/profiles', profileRoutes);
+app.route('/teams', teamRoutes);
 
 export default app;
