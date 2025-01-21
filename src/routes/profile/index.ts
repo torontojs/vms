@@ -1,9 +1,9 @@
 import { type Context, Hono } from 'hono';
+import { createProfile } from '../../controllers/createProfile.ts';
+import { updateProfileById } from '../../controllers/updateProfile.ts';
 import { IdSchema } from '../../utils/id-validation.ts';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
 import { deleteProfileById, getAllProfiles, getProfileById } from './data.ts';
-import { createProfile } from '../../controllers/createProfile.ts';
-import { updateProfileById } from '../../controllers/updateProfile.ts';
 
 export const profileRoutes = new Hono();
 
@@ -57,6 +57,6 @@ profileRoutes.delete('/:id', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-profileRoutes.post('/', createProfile)
+profileRoutes.post('/', createProfile);
 
-profileRoutes.patch('/:id', updateProfileById)
+profileRoutes.patch('/:id', updateProfileById);

@@ -4,7 +4,7 @@ export interface Profile {
 	schemaVersion: number;
 	name: string;
 	description?: string;
-	happenedAt: Date;
-	insertedAt: Date;
+	happenedAt: ISODate;
+	insertedAt: ISODate;
 	links?: string;
 }
