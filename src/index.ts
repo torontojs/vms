@@ -1,8 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import profilesRoute from './routes/profiles/profiles';
-import teamsRoutes from './routes/teams/teams';
-import teamsSqlRoute from './routes/teams/teamsSql';
+import { teamRoutes } from './routes/team/index.ts';
 
 const app = new Hono();
 
@@ -19,7 +18,6 @@ app.use(
 );
 
 app.route('/profiles', profilesRoute);
-app.route('/sql/teams', teamsSqlRoute);
-app.route('/teams', teamsRoutes);
+app.route('/teams', teamRoutes);
 
 export default app;
