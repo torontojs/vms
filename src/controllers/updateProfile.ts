@@ -2,8 +2,8 @@ import type { Context } from 'hono';
 import type { ZodError } from 'zod';
 import { z } from 'zod';
 
-import { StatusCodes } from '../constants/status-codes';
-import { updateProfile } from '../db/profile';
+import { StatusCodes } from '../utils/responses.ts';
+import { updateProfile } from '../routes/profile/data.ts';
 import { validateProfileId } from '../validator/profile';
 
 const UpdateProfileSchema = z.object({

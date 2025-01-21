@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
-import { StatusCodes } from 'src/constants/status-codes';
-import { insertProfile } from 'src/db/profile';
+import { StatusCodes } from '../utils/responses.ts';
+import { insertProfile } from '../routes/profile/data.ts';
 import { z, ZodError } from 'zod';
 
 const CreateProfileSchema = z.object({
