@@ -1,6 +1,6 @@
 import type { Context } from 'hono';
-import teams from '../data/teams.json';
 import { StatusCodes } from '../constants/status-codes';
+import teams from '../data/teams.json';
 
 export const getAllTeams = (context: Context) => context.json(teams, StatusCodes.OKAY);
 
