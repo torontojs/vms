@@ -29,7 +29,7 @@ export enum StatusCodes {
 	 * - `PUT` or `POST`: The resource describing the result of the action is transmitted in the message body.
 	 * - `TRACE`: The message body contains the request as received by the server.
 	 */
-	OK = 200,
+	OKAY = 200,
 	/**
 	 * The request succeeded, and a new resource was created as a result. This is typically the response sent after `POST` requests, or some `PUT` requests.
 	 */
