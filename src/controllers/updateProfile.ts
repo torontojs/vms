@@ -2,8 +2,8 @@ import type { Context } from 'hono';
 import type { ZodError } from 'zod';
 import { z } from 'zod';
 
-import { StatusCodes } from '../utils/responses.ts';
 import { updateProfile } from '../routes/profile/data.ts';
+import { StatusCodes } from '../utils/responses.ts';
 import { validateProfileId } from '../validator/profile';
 
 const UpdateProfileSchema = z.object({
@@ -49,7 +49,7 @@ export async function updateProfileById(context: Context<EnvironmentBindings>) {
 	}
 
 	const profileId = context.req.param('id');
-	const isProfileIdValid: boolean = await validateProfileId({
+	const isProfileIdValid = await validateProfileId({
 		id: profileId,
 		database: context.env.database
 	});
@@ -65,10 +65,8 @@ export async function updateProfileById(context: Context<EnvironmentBindings>) {
 
 	try {
 		const { success } = await updateProfile({
-			payload: {
-				id: profileId,
-				...parsedBody
-			},
+			id: profileId,
+			data: parsedBody,
 			database: context.env.database
 		});
 

@@ -1,7 +1,7 @@
 import type { Context } from 'hono';
-import { StatusCodes } from '../utils/responses.ts';
-import { insertProfile } from '../routes/profile/data.ts';
 import { z, ZodError } from 'zod';
+import { insertProfile } from '../routes/profile/data.ts';
+import { StatusCodes } from '../utils/responses.ts';
 
 const CreateProfileSchema = z.object({
 	email: z

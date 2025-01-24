@@ -3,7 +3,7 @@ import type { Profile } from './validation.ts';
 
 export async function getProfileById(database: D1Database, profileId: string) {
 	const { results } = await database
-		.prepare('SELECT * FROM profiles WHERE id = ?')
+		.prepare('SELECT * FROM profile WHERE id = ?')
 		.bind(profileId)
 		.run<Profile>();
 
@@ -11,14 +11,14 @@ export async function getProfileById(database: D1Database, profileId: string) {
 }
 
 export async function getAllProfiles(database: D1Database) {
-	const { results } = await database.prepare('SELECT * FROM profiles').run<Profile>();
+	const { results } = await database.prepare('SELECT * FROM profile').run<Profile>();
 
 	return results;
 }
 
 export async function deleteProfileById(database: D1Database, profileId: string) {
 	const { success } = await database
-		.prepare('DELETE FROM profiles WHERE id = ?')
+		.prepare('DELETE FROM profile WHERE id = ?')
 		.bind(profileId)
 		.run();
 
@@ -60,23 +60,22 @@ export async function insertProfile({
 		.run();
 }
 
-interface UpdateProfilePayload {
-	id: string;
-	name?: string;
-	description?: string;
-	links?: string;
-	happenedAt: string;
-}
 interface UpdateProfileParams {
-	payload: UpdateProfilePayload;
+	id: string;
+	data: Partial<{
+		name: string,
+		description: string,
+		links: string,
+		happenedAt: string
+	}>;
 	database: D1Database;
 }
 
 export async function updateProfile({
-	payload: { id, name, description, links, happenedAt },
+	id,
+	data,
 	database
 }: UpdateProfileParams) {
-	const data = { name, description, links, happenedAt };
 	const entries = Object.entries(data).filter(
 		([, value]) => value !== undefined
 	);
