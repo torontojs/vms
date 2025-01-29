@@ -24,7 +24,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 
 	try {
 		const parsedBody = CreateProfileSchema.parse(body);
-		const { success, meta } = await insertProfile({
+		const { success, id } = await insertProfile({
 			payload: parsedBody,
 			database: context.env.database
 		});
@@ -34,7 +34,7 @@ export async function createProfile(context: Context<EnvironmentBindings>) {
 		}
 
 		return context.json(
-			{ message: 'Profile created successfully', createdId: meta.last_row_id },
+			{ message: 'Profile created successfully', createdId: id },
 			StatusCodes.CREATED
 		);
 	} catch (error) {

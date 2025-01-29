@@ -8,8 +8,8 @@ import { validateProfileId } from '../validator/profile';
 
 const UpdateProfileSchema = z.object({
 	name: z
-		.string({ required_error: 'Name is required' })
-		.min(1, 'Name should me 1 or more characters')
+		.string()
+		.min(1, 'Name should be 1 or more characters long')
 		.optional(),
 	description: z.string().optional(),
 	happenedAt: z

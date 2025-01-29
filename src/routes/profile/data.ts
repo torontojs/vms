@@ -40,13 +40,11 @@ export async function insertProfile({
 	const insertedAt = new Date().toISOString();
 	const id = crypto.randomUUID();
 
-	return database
-		.prepare(
-			`
-      INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
-      VALUES (?,?,?,?,?,?,?,?)
-      `
-		)
+	const { success } = await database
+		.prepare(`
+			INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
+      		VALUES (?,?,?,?,?,?,?,?)
+      	`)
 		.bind(
 			id,
 			email,
@@ -58,6 +56,8 @@ export async function insertProfile({
 			SCHEMA_VERSION
 		)
 		.run();
+
+	return { success, id };
 }
 
 interface UpdateProfileParams {
