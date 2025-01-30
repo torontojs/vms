@@ -1,13 +1,13 @@
-import { type Context, Hono } from 'hono';
+import { Hono } from 'hono';
 
 import { IdSchema } from '../../utils/id-validation.ts';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
 import { createNewTeam, deleteTeamById, getAllTeams, getTeamById, updateTeamById } from './data.ts';
 import { NewTeamSchema, type UpdateTeamData, UpdateTeamSchema } from './validation.ts';
 
-export const teamRoutes = new Hono();
+export const teamRoutes = new Hono<EnvironmentBindings>();
 
-teamRoutes.post('/', async (context: Context<EnvironmentBindings>) => {
+teamRoutes.post('/', async (context) => {
 	try {
 		const body = await context.req.json();
 		const parsedBody = NewTeamSchema.parse(body);
@@ -24,7 +24,7 @@ teamRoutes.post('/', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-teamRoutes.patch('/:id', async (context: Context<EnvironmentBindings>) => {
+teamRoutes.patch('/:id', async (context) => {
 	try {
 		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
 
@@ -51,7 +51,7 @@ teamRoutes.patch('/:id', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-teamRoutes.get('/:id', async (context: Context<EnvironmentBindings>) => {
+teamRoutes.get('/:id', async (context) => {
 	try {
 		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
 
@@ -71,7 +71,7 @@ teamRoutes.get('/:id', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-teamRoutes.get('/', async (context: Context<EnvironmentBindings>) => {
+teamRoutes.get('/', async (context) => {
 	try {
 		const teams = await getAllTeams(context.env.database);
 
@@ -81,7 +81,7 @@ teamRoutes.get('/', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-teamRoutes.delete('/:id', async (context: Context<EnvironmentBindings>) => {
+teamRoutes.delete('/:id', async (context) => {
 	try {
 		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
 

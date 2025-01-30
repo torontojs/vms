@@ -1,11 +1,11 @@
-import { type Context, Hono } from 'hono';
+import { Hono } from 'hono';
 import { IdSchema } from '../../utils/id-validation.ts';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
 import { deleteProfileById, getAllProfiles, getProfileById } from './data.ts';
 
-export const profileRoutes = new Hono();
+export const profileRoutes = new Hono<EnvironmentBindings>();
 
-profileRoutes.get('/:id', async (context: Context<EnvironmentBindings>) => {
+profileRoutes.get('/:id', async (context) => {
 	try {
 		const { success: isValidProfileId, data: profileId } = IdSchema.safeParse(context.req.param('id'));
 
@@ -25,7 +25,7 @@ profileRoutes.get('/:id', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-profileRoutes.get('/', async (context: Context<EnvironmentBindings>) => {
+profileRoutes.get('/', async (context) => {
 	try {
 		const profiles = await getAllProfiles(context.env.database);
 
@@ -35,7 +35,7 @@ profileRoutes.get('/', async (context: Context<EnvironmentBindings>) => {
 	}
 });
 
-profileRoutes.delete('/:id', async (context: Context<EnvironmentBindings>) => {
+profileRoutes.delete('/:id', async (context) => {
 	try {
 		const { success: isValidProfileId, data: profileId } = IdSchema.safeParse(context.req.param('id'));
 
