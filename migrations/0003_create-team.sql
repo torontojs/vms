@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS team (
 	-- The date when this team was added to the database
 	insertedAt TEXT NOT NULL,
 	-- The date this team was closed
-	closedAt TEXT NOT NULL,
+	closedAt TEXT,
 
 	PRIMARY KEY (id)
 );

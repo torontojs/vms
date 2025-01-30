@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS profile (
 	-- The user avatar reference,
 	avatar TEXT,
 	-- The avatar may be a url, or an id for a file hosted on the platform
-	avatarSource TEXT DEFAULT 'id' CHECK(avatarSource IN ('id', 'url')),
+	avatarSource TEXT DEFAULT 'id' CHECK(avatarSource IS NULL OR avatarSource IN ('id', 'url')),
 	-- The date this person has joined Toronto JS
 	happenedAt TEXT NOT NULL,
 	-- The date this profile was added to the database
