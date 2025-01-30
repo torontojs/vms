@@ -13,6 +13,8 @@ keep_vars = true
 binding = "database"
 database_name = "vms-local-db"
 database_id = "vms-local-db"
+migrations_table = "migrations"
+migrations_dir = "migrations"
 
 [env.dev]
 name = "vms-dev"
