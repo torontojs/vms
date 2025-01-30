@@ -9,5 +9,5 @@ declare namespace DB {
 		insertedAt: ISODate;
 	}
 
-	type BaseEntry = DB.IdAndSchemaVersion & DB.InsertionTimestamps;
+	type BaseEntry = IdAndSchemaVersion & InsertionTimestamps;
 }

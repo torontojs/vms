@@ -200,7 +200,7 @@ export interface StatusResponse<T extends Record<string, string[] | undefined> =
 /**
  * A response containing some data for a single resource.
  */
-export interface DataResponse<T extends unknown> extends HAL.Response {
+export interface DataResponse<T> extends HAL.Response {
 	data: T;
 }
 
@@ -209,7 +209,7 @@ export interface DataResponse<T extends unknown> extends HAL.Response {
  *
  * The data should be an array of resources. Information about the page should be included with the response.
  */
-export interface PaginationResposne<T extends unknown> {
+export interface PaginationResposne<T> {
 	/**
 	 * The list of results on this page.
 	 */

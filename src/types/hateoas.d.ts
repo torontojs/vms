@@ -21,11 +21,12 @@ declare namespace HAL {
 		/**
 		 * A list of links providing information about related data for this resource.
 		 */
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		_links: {
 			/**
 			 * Represents the URL for the current resource.
 			 */
-			self: HAL.Link
+			self: Link
 		};
 	}
 
@@ -33,29 +34,30 @@ declare namespace HAL {
 		/**
 		 * A list of links providing information about related data for this resource.
 		 */
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		_links: {
 			/**
 			 * Represents the URL for the current resource.
 			 */
-			self: HAL.Link,
+			self: Link,
 			/**
 			 * The URL for the first resource.
 			 * Note that this could be the same as the URL for the current resource.
 			 */
-			first: HAL.Link,
+			first: Link,
 			/**
 			 * The URL for the last resource.
 			 * Note that this could be the same as the URL for the current resource.
 			 */
-			last: HAL.Link,
+			last: Link,
 			/**
 			 * The URL for the previous resource, if there is any.
 			 */
-			prev?: HAL.Link,
+			prev?: Link,
 			/**
 			 * The URL for the next resource, if there is any.
 			 */
-			next?: HAL.Link
+			next?: Link
 		};
 	}
 }
