@@ -16,10 +16,6 @@ export async function createNewTeam(database: D1Database, body: NewTeamData) {
 }
 
 export async function updateTeamById(database: D1Database, teamId: string, body: UpdateTeamData) {
-	if (Object.keys(body).length === 0) {
-		throw new Error('No fields provided to update');
-	}
-
 	const { success } = await database
 		.prepare(`UPDATE team SET ${Object.keys(body).join(', ')} WHERE id = ?`)
 		.bind(...Object.values(body), teamId)

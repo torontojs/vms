@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { IdSchema } from '../../utils/id-validation.ts';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
+import { IdSchema } from '../../utils/validation.ts';
 import { deleteProfileById, getAllProfiles, getProfileById } from './data.ts';
 
 export const profileRoutes = new Hono<EnvironmentBindings>();

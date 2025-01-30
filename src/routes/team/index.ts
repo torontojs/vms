@@ -1,18 +1,16 @@
 import { Hono } from 'hono';
 
-import { IdSchema } from '../../utils/id-validation.ts';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
+import { idValidator, jsonValidator } from '../../utils/validation.ts';
 import { createNewTeam, deleteTeamById, getAllTeams, getTeamById, updateTeamById } from './data.ts';
-import { NewTeamSchema, type UpdateTeamData, UpdateTeamSchema } from './validation.ts';
+import { NewTeamSchema, UpdateTeamSchema } from './validation.ts';
 
 export const teamRoutes = new Hono<EnvironmentBindings>();
 
-teamRoutes.post('/', async (context) => {
+teamRoutes.post('/', jsonValidator(NewTeamSchema), async (context) => {
 	try {
-		const body = await context.req.json();
-		const parsedBody = NewTeamSchema.parse(body);
-
-		const isSaved = await createNewTeam(context.env.database, parsedBody);
+		const body = context.req.valid('json');
+		const isSaved = await createNewTeam(context.env.database, body);
 
 		if (!isSaved) {
 			return context.json<StatusResponse>({ message: 'Team not saved' }, StatusCodes.FORBIDDEN);
@@ -24,22 +22,11 @@ teamRoutes.post('/', async (context) => {
 	}
 });
 
-teamRoutes.patch('/:id', async (context) => {
+teamRoutes.patch('/:id', idValidator, jsonValidator(UpdateTeamSchema), async (context) => {
 	try {
-		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
-
-		if (!isValidTeamId) {
-			return context.json<StatusResponse>({ message: 'Invalid Team ID' }, StatusCodes.BAD_REQUEST);
-		}
-
-		const body: UpdateTeamData = await context.req.json();
-		const { success: isValidData, data: parsedBody, error } = UpdateTeamSchema.safeParse(body);
-
-		if (!isValidData) {
-			return context.json<StatusResponse>({ message: JSON.stringify(error) }, StatusCodes.BAD_REQUEST);
-		}
-
-		const isUpdated = await updateTeamById(context.env.database, teamId, parsedBody);
+		const id = context.req.valid('param');
+		const body = context.req.valid('json');
+		const isUpdated = await updateTeamById(context.env.database, id, body);
 
 		if (!isUpdated) {
 			return context.json<StatusResponse>({ message: 'Team not updated' }, StatusCodes.FORBIDDEN);
@@ -51,15 +38,10 @@ teamRoutes.patch('/:id', async (context) => {
 	}
 });
 
-teamRoutes.get('/:id', async (context) => {
+teamRoutes.get('/:id', idValidator, async (context) => {
 	try {
-		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
-
-		if (!isValidTeamId) {
-			return context.json<StatusResponse>({ message: 'Invalid Team ID' }, StatusCodes.BAD_REQUEST);
-		}
-
-		const team = await getTeamById(context.env.database, teamId);
+		const id = context.req.valid('param');
+		const team = await getTeamById(context.env.database, id);
 
 		if (!team) {
 			return context.json<StatusResponse>({ message: 'Team not found' }, StatusCodes.NOT_FOUND);
@@ -81,15 +63,10 @@ teamRoutes.get('/', async (context) => {
 	}
 });
 
-teamRoutes.delete('/:id', async (context) => {
+teamRoutes.delete('/:id', idValidator, async (context) => {
 	try {
-		const { success: isValidTeamId, data: teamId } = IdSchema.safeParse(context.req.param('id'));
-
-		if (!isValidTeamId) {
-			return context.json<StatusResponse>({ message: 'Invalid Team ID' }, StatusCodes.BAD_REQUEST);
-		}
-
-		const isDeleted = await deleteTeamById(context.env.database, teamId);
+		const id = context.req.valid('param');
+		const isDeleted = await deleteTeamById(context.env.database, id);
 
 		if (!isDeleted) {
 			return context.json<StatusResponse>({ message: 'Team not deleted' }, StatusCodes.FORBIDDEN);
