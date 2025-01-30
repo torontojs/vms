@@ -187,6 +187,71 @@ export enum StatusCodes {
 	NETWORK_AUTHENTICATION_REQUIRED = 511
 }
 
-export interface StatusResponse {
+/**
+ * A response with a status for the operation that does not return data for a resource.
+ *
+ * It may contain an `errors` object specifying validation errors with the data passed.
+ */
+export interface StatusResponse<T extends Record<string, string[] | undefined> = Record<string, string[] | undefined>> {
 	message: string;
+	errors?: T;
+}
+
+/**
+ * A response containing some data for a single resource.
+ */
+export interface DataResponse<T extends unknown> extends HAL.Response {
+	data: T;
+}
+
+/**
+ * A response for paginated data.
+ *
+ * The data should be an array of resources. Information about the page should be included with the response.
+ */
+export interface PaginationResposne<T extends unknown> {
+	/**
+	 * The list of results on this page.
+	 */
+	data: T[];
+	/**
+	 * The index for the first result on this page,
+	 * starting from 0 and taking into account the offset from previous pages.
+	 *
+	 * For example, if `currentPage` is 4, and `total` is also 10,
+	 * this means `start` would be 4 * 10 = 40.
+	 */
+	start: number;
+	/**
+	 * The index for the last result on this page,
+	 * it is `start` + `total`.
+	 *
+	 * For example, if `start` is 40 and `total` is 10,
+	 * then `end` would be 40 + 10 = 50.
+	 */
+	end: number;
+	/**
+	 * The total number of items **_on the current page_**.
+	 * Not to be confused with `size`, which is the total numbers _per page_.
+	 *
+	 * For example, if `size` is 10, but the last page only have 6 results left,
+	 * then `total` would be 6.
+	 */
+	total: number;
+	/**
+	 * The total number of items **_per page_**.
+	 * Not to be confused with `total`, which is the total number of items _on the current page_.
+	 *
+	 * For exampe, if we have 12 results, and want to split them into pages with 10 results each,
+	 * then `size` would be 10, regardless of how many items the actual page has.
+	 */
+	size: number;
+	/**
+	 * The number for the current page, starting from 1.
+	 */
+	currentPage: number;
+	/**
+	 * The number of last page.
+	 */
+	lastPage: number;
 }
