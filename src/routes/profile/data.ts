@@ -1,9 +1,9 @@
-import { SCHEMA_VERSION } from '../../constants/db.ts';
+import { DBTables, SCHEMA_VERSION } from '../../constants/db.ts';
 import type { Profile } from './validation.ts';
 
 export async function getProfileById(database: D1Database, profileId: string) {
 	const { results } = await database
-		.prepare('SELECT * FROM profile WHERE id = ?')
+		.prepare(`SELECT * FROM ${DBTables.PROFILE} WHERE id = ?`)
 		.bind(profileId)
 		.run<Profile>();
 
@@ -11,14 +11,14 @@ export async function getProfileById(database: D1Database, profileId: string) {
 }
 
 export async function getAllProfiles(database: D1Database) {
-	const { results } = await database.prepare('SELECT * FROM profile').run<Profile>();
+	const { results } = await database.prepare(`SELECT * FROM ${DBTables.PROFILE}`).run<Profile>();
 
 	return results;
 }
 
 export async function deleteProfileById(database: D1Database, profileId: string) {
 	const { success } = await database
-		.prepare('DELETE FROM profile WHERE id = ?')
+		.prepare(`DELETE FROM ${DBTables.PROFILE} WHERE id = ?`)
 		.bind(profileId)
 		.run();
 
@@ -42,7 +42,7 @@ export async function insertProfile({
 
 	const { success } = await database
 		.prepare(`
-			INSERT INTO profile (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
+			INSERT INTO ${DBTables.PROFILE} (id, email, name, description, links, happenedAt, insertedAt, schemaVersion)
       		VALUES (?,?,?,?,?,?,?,?)
       	`)
 		.bind(
@@ -81,7 +81,7 @@ export async function updateProfile({
 	);
 	const setClause = entries.map(([key]) => `${key} = ?`).join(', ');
 	const values = [...entries.map(([, value]) => value), id];
-	const query = `UPDATE profile SET ${setClause} WHERE id = ?`;
+	const query = `UPDATE ${DBTables.PROFILE} SET ${setClause} WHERE id = ?`;
 
 	return database
 		.prepare(query)
