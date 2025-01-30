@@ -4,12 +4,21 @@ import type { NewTeamData, Team, UpdateTeamData } from './validation.ts';
 export async function createNewTeam(database: D1Database, body: NewTeamData) {
 	const id = crypto.randomUUID();
 	const insertedAt = new Date().toISOString();
-	const happenedAt = new Date(body.happenedAt).toISOString();
+	const happenedAt = insertedAt;
 
-	const { success } = await database.prepare(
-		'INSERT INTO team (id, name, schemaVersion, description, happenedAt, insertedAt) VALUES (?,?,?,?,?,?)'
-	)
-		.bind(id, body.name, SCHEMA_VERSION, body.description ?? '', happenedAt, insertedAt)
+	const { success } = await database.prepare(`
+		INSERT INTO team (
+			id, schemaVersion,
+			happenedAt, insertedAt,
+			${Object.keys(body).join(', ')}
+		)
+		VALUES (
+			?, ?,
+			?, ?,
+			${Object.keys(body).fill('?').join(', ')}
+		)
+	`)
+		.bind(id, SCHEMA_VERSION, happenedAt, insertedAt, ...Object.values(body))
 		.run();
 
 	return success;
@@ -17,7 +26,11 @@ export async function createNewTeam(database: D1Database, body: NewTeamData) {
 
 export async function updateTeamById(database: D1Database, teamId: string, body: UpdateTeamData) {
 	const { success } = await database
-		.prepare(`UPDATE team SET ${Object.keys(body).join(', ')} WHERE id = ?`)
+		.prepare(`
+			UPDATE team
+			SET ${Object.keys(body).join(', ')}
+			WHERE id = ?
+		`)
 		.bind(...Object.values(body), teamId)
 		.run();
 
