@@ -11,9 +11,6 @@ const CreateProfileSchema = z.object({
 		.string({ required_error: 'Name is required' })
 		.min(1, 'Name should me 1 or more characters'),
 	description: z.string().optional(),
-	happenedAt: z
-		.string({ required_error: 'HappenedAt is required' })
-		.datetime('HappenedAt should be ISO date string format'),
 	links: z.string().url('Invalid url').optional()
 });
 

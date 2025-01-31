@@ -26,15 +26,12 @@ export async function deleteProfileById(database: D1Database, profileId: string)
 }
 
 interface InsertProfileParams {
-	payload: Pick<
-		Profile,
-		'description' | 'email' | 'happenedAt' | 'links' | 'name'
-	>;
+	payload: Pick<Profile, 'description' | 'email' | 'links' | 'name'>;
 	database: D1Database;
 }
 
 export async function insertProfile({
-	payload: { email, name, description, links, happenedAt },
+	payload: { email, name, description, links },
 	database
 }: InsertProfileParams) {
 	const insertedAt = new Date().toISOString();
@@ -51,7 +48,7 @@ export async function insertProfile({
 			name,
 			description ?? null,
 			links ?? null,
-			happenedAt,
+			insertedAt,
 			insertedAt,
 			SCHEMA_VERSION
 		)
