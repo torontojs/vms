@@ -16,16 +16,16 @@
 		"hono": "^4.6.17"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250121.0",
-		"@types/node": "^22.10.2",
-		"@typescript-eslint/eslint-plugin": "8.18.1",
-		"@typescript-eslint/parser": "8.18.1",
+		"@cloudflare/workers-types": "^4.20250129.0",
+		"@types/node": "^22.13.0",
+		"@typescript-eslint/eslint-plugin": "8.22.0",
+		"@typescript-eslint/parser": "8.22.0",
 		"dprint": "0.48.0",
-		"eslint": "9.17.0",
-		"globals": "15.13.0",
+		"eslint": "9.19.0",
+		"globals": "15.14.0",
 		"husky": "9.1.7",
 		"typescript": "5.7.2",
-		"wrangler": "^3.103.2"
+		"wrangler": "^3.107.2"
 	},
 	"volta": {
 		"node": "22.12.0"
