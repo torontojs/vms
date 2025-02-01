@@ -77,11 +77,10 @@ export async function updateProfile({
 		([, value]) => value !== undefined
 	);
 	const setClause = entries.map(([key]) => `${key} = ?`).join(', ');
-	const values = [...entries.map(([, value]) => value), id];
 	const query = `UPDATE ${DBTables.PROFILE} SET ${setClause} WHERE id = ?`;
 
 	return database
 		.prepare(query)
-		.bind(...values)
+		.bind(...entries.map(([, value]) => value), id)
 		.run();
 }
