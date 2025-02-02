@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { BaseDbEntitySchema } from '../../constants/db.ts';
 
 export const NewTeamSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
@@ -7,15 +8,10 @@ export const NewTeamSchema = z.object({
 
 export type NewTeamData = z.infer<typeof NewTeamSchema>;
 
-export const UpdateTeamSchema = z
-	.object({})
-	.merge(NewTeamSchema)
-	.partial()
-	.refine(
-		(obj) => Object.values(obj ?? {}).some((val) => val !== undefined),
-		{ message: 'At least one property must be specified.' }
-	);
+export const UpdateTeamSchema = NewTeamSchema.partial();
 
 export type UpdateTeamData = z.infer<typeof UpdateTeamSchema>;
 
-export interface Team extends NewTeamData, DB.BaseEntry {}
+export const TeamSchema = BaseDbEntitySchema.merge(UpdateTeamSchema).required();
+
+export type Team = z.infer<typeof TeamSchema>;
