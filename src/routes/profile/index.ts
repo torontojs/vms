@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
-import { IdSchema } from '../../utils/validation.ts';
+import { IdParamSchema } from '../../utils/validation.ts';
 import { deleteProfileById, getAllProfiles, getProfileById } from './data.ts';
 
 export const profileRoutes = new Hono<EnvironmentBindings>();
 
 profileRoutes.get('/:id', async (context) => {
 	try {
-		const { success: isValidProfileId, data: profileId } = IdSchema.safeParse(context.req.param('id'));
+		const { success: isValidProfileId, data: { id: profileId = '' } = {} } = IdParamSchema.safeParse(context.req.param('id'));
 
 		if (!isValidProfileId) {
 			return context.json<StatusResponse>({ message: 'Invalid Profile ID' }, StatusCodes.BAD_REQUEST);
@@ -37,7 +37,7 @@ profileRoutes.get('/', async (context) => {
 
 profileRoutes.delete('/:id', async (context) => {
 	try {
-		const { success: isValidProfileId, data: profileId } = IdSchema.safeParse(context.req.param('id'));
+		const { success: isValidProfileId, data: { id: profileId = '' } = {} } = IdParamSchema.safeParse(context.req.param('id'));
 
 		if (!isValidProfileId) {
 			return context.json<StatusResponse>({ message: 'Invalid Profile ID' }, StatusCodes.BAD_REQUEST);
