@@ -249,7 +249,7 @@ const rules = {
 		leadingUnderscore: 'allow',
 		trailingUnderscore: 'forbid',
 		filter: {
-			regex: '^(_id|__v)$',
+			regex: '^(_id|__v|_links)$',
 			match: false
 		}
 	}, {
@@ -263,7 +263,7 @@ const rules = {
 		leadingUnderscore: 'forbid',
 		trailingUnderscore: 'forbid',
 		filter: {
-			regex: '^(_id|__v)$',
+			regex: '^(_id|__v|_links)$',
 			match: false
 		}
 	}, {
@@ -283,7 +283,7 @@ const rules = {
 		leadingUnderscore: 'forbid',
 		trailingUnderscore: 'forbid',
 		filter: {
-			regex: '^(_id|__v)$',
+			regex: '^(_id|__v|_links)$',
 			match: false
 		}
 	}, {
@@ -292,7 +292,7 @@ const rules = {
 		leadingUnderscore: 'forbid',
 		trailingUnderscore: 'forbid',
 		filter: {
-			regex: '^(_id|__v)$',
+			regex: '^(_id|__v|_links)$',
 			match: false
 		}
 	}, {
