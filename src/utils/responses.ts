@@ -227,7 +227,6 @@ export const HALLinkSchema = z.object({
 export type HALLink = z.infer<typeof HALLinkSchema>;
 
 export const HALResponseSchema = z.object({
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	_links: z.object({
 		self: HALLinkSchema
 			.describe('A URL representing the resource itself.')
@@ -236,8 +235,18 @@ export const HALResponseSchema = z.object({
 
 export type HALResponse = z.infer<typeof HALResponseSchema>;
 
+/**
+ * Generate a schema for responses containing data for a single resource.
+ */
+export function generateDataResponeSchema<T>(data: ZodType<T>) {
+	return z.object({
+		data
+	}).merge(HALResponseSchema);
+}
+
+export type DataResponse<T> = z.infer<ReturnType<typeof generateDataResponeSchema<T>>>;
+
 export const HALPaginatedResponseSchema = z.object({
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	_links: z.object({
 		self: HALLinkSchema
 			.describe('A URL representing the resource itself.'),
@@ -253,17 +262,6 @@ export const HALPaginatedResponseSchema = z.object({
 });
 
 export type HALPaginatedResponse = z.infer<typeof HALPaginatedResponseSchema>;
-
-/**
- * Generate a schema for responses containing data for a single resource.
- */
-export function generateDataResponeSchema<T>(data: ZodType<T>) {
-	return z.object({
-		data
-	}).merge(HALResponseSchema);
-}
-
-export type DataResponse<T> = ReturnType<typeof generateDataResponeSchema<T>>;
 
 /**
  * Generate a schema for responses containing paginated data.
@@ -287,11 +285,11 @@ export function generatePaginatedResponseSchema<T extends unknown[]>(data: ZodTy
 			.describe(
 				'The total number of items **_per page_**. Not to be confused with `total`, which is the total number of items _on the current page_. For exampe, if we have 12 results, and want to split them into pages with 10 results each, then `size` would be 10, regardless of how many items the actual page has.'
 			),
-		currentPage: z.number().int()
+		currentPage: z.number().int().positive()
 			.describe('The number for the current page, starting from 1.'),
-		lastPage: z.number().int()
+		lastPage: z.number().int().positive()
 			.describe('The number of last page.')
 	}).merge(HALPaginatedResponseSchema);
 }
 
-export type PaginatedResponse<T extends unknown[]> = ReturnType<typeof generatePaginatedResponseSchema<T>>;
+export type PaginatedResponse<T extends unknown[]> = z.infer<ReturnType<typeof generatePaginatedResponseSchema<T>>>;
