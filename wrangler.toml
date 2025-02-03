@@ -14,6 +14,12 @@ binding = "database"
 database_name = "vms-local-db"
 database_id = "vms-local-db"
 
+# Add KV Namespace here
+[[kv_namespaces]]
+binding = "KV_STORE"
+id = "sessionToken"
+preview_id = "test-kv-store" # Enables local KV usage
+
 [env.dev]
 name = "vms-dev"
 
