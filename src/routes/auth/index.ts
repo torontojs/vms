@@ -1,10 +1,10 @@
 import { type Context, Hono } from 'hono';
 
+// Import { setCookie } from 'hono/cookie';
 import { ZodError } from 'zod';
 import { StatusCodes, type StatusResponse } from '../../utils/responses.ts';
 import { authenticate } from './data.ts';
 import { SignInSchema } from './validate.ts';
-import { setCookie } from "hono/cookie";
 
 export const authRoutes = new Hono();
 
@@ -21,10 +21,10 @@ authRoutes.post('/sign-in', async (context: Context<EnvironmentBindings>) => {
 			return context.json<StatusResponse>({ message: 'Authorized requests' }, StatusCodes.UNAUTHORIZED);
 		}
 
-		const sessionToken = crypto.randomUUID()
+		const sessionToken = crypto.randomUUID();
 		const hoursAhead = 1;
 		const futureTimestamp = String(Date.now() + hoursAhead * 60 * 60 * 1000);
-		await context.env.kv.put(sessionToken, futureTimestamp)
+		await context.env.kv.put(sessionToken, futureTimestamp);
 
 		return context.json<StatusResponse>({ message: 'Authorized successfully', data: sessionToken }, StatusCodes.CREATED);
 	} catch (err) {
