@@ -18,7 +18,7 @@ database_id = "vms-local-db"
 [[kv_namespaces]]
 binding = "KV_STORE"
 id = "sessionToken"
-preview_id = "test-kv-store" # Enables local KV usage
+preview_id = "kv-dev-store" # Enables local KV usage
 
 [env.dev]
 name = "vms-dev"
